@@ -1,0 +1,51 @@
+/PROG  _CHK_COVER_PRES
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 519;
+CREATE		= DATE 21-08-24  TIME 04:36:42;
+MODIFIED	= DATE 21-08-24  TIME 04:38:34;
+FILE_NAME	= ;
+VERSION		= 0;
+LINE_COUNT	= 23;
+MEMORY_SIZE	= 963;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  //R[150:RETRY]=R[150:RETRY]+1    ;
+   2:   ;
+   3:  //IF (R[150:RETRY]<2) THEN ;
+   4:  !**Test cov pres** ;
+   5:  CALL _T1_CLAMP    ;
+   6:  IF (R[15:DUST COVER ON T1]=1) THEN ;
+   7:  JMP LBL[99] ;
+   8:  ELSE ;
+   9:  CALL _T1_UNCLAMP    ;
+  10:  ENDIF ;
+  11:   ;
+  12:   ;
+  13:  CALL _T2_CLAMP    ;
+  14:  IF (R[16:DUST COVER ON T2]=1) THEN ;
+  15:  JMP LBL[99] ;
+  16:  ELSE ;
+  17:  CALL _T2_UNCLAMP    ;
+  18:  ENDIF ;
+  19:   ;
+  20:   ;
+  21:   ;
+  22:   ;
+  23:  LBL[99] ;
+/POS
+/END

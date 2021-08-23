@@ -1,0 +1,80 @@
+/PROG  _PICK_T1_DC
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 1278;
+CREATE		= DATE 21-08-19  TIME 21:16:14;
+MODIFIED	= DATE 21-08-23  TIME 23:38:46;
+FILE_NAME	= _PICK_T1;
+VERSION		= 0;
+LINE_COUNT	= 46;
+MEMORY_SIZE	= 1790;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  UTOOL_NUM=1 ;
+   2:  UFRAME_NUM=0 ;
+   3:   ;
+   4:  !ADJUST COLL GUARD ;
+   5:  R[200:PAYLOAD_ADJUST]=120    ;
+   6:  COL GUARD ADJUST R[200] ;
+   7:  COL DETECT ON ;
+   8:  PAYLOAD[3:MASTER] ;
+   9:  $WAITTMOUT=(500) ;
+  10:   ;
+  11:  CALL _T1_CLAMP    ;
+  12:  !CHECK FOR T1 ;
+  13:  IF R[3:TOOL #]<>0,JMP LBL[99] ;
+  14:  IF DI[2:TOOL_UNLOCKED]<>ON,JMP LBL[99] ;
+  15:  IF DI[11:T1_COVER_CLAMPED]=OFF,JMP LBL[99] ;
+  16:   ;
+  17:  CALL _T1_UNCLAMP    ;
+  18:  WAIT DI[15:T1_UNLOCKED_FIXT]=ON    ;
+  19:  ! Set Offset ;
+  20:  PR[4:TOOL_OFFSET]=PR[4:TOOL_OFFSET]-PR[4:TOOL_OFFSET]    ;
+  21:  PR[4,3:TOOL_OFFSET]=(65) ;
+  22:   ;
+  23:  !SAFE APPROACH ;
+  24:L P[1:atCover] 500mm/sec CNT30 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  25:   ;
+  26:  !PICK T1 DUST COVER ;
+  27:L P[1:atCover] 100mm/sec FINE    ;
+  28:  CALL _ATI_LOCK    ;
+  29:  WAIT    .50(sec) ;
+  30:  WAIT DI[1:TOOL_LOCKED]=OFF AND DI[2:TOOL_UNLOCKED]=OFF TIMEOUT,LBL[1] ;
+  31:   ;
+  32:  !SAFE RETREAT ;
+  33:L P[1:atCover] 100mm/sec CNT30 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  34:  JMP LBL[99] ;
+  35:   ;
+  36:  LBL[1] ;
+  37:  R[15:DUST COVER ON T1]=1    ;
+  38:  CALL _ATI_UNLOCK    ;
+  39:   ;
+  40:  LBL[99] ;
+  41:  END ;
+  42:  !**Touch up** ;
+  43:L P[1:atCover] 100mm/sec FINE    ;
+  44:   ;
+  45:   ;
+  46:   ;
+/POS
+P[1:"atCover"]{
+   GP1:
+	UF : 0, UT : 1,		CONFIG : 'N U T, 0, 0, 0',
+	X =    40.483  mm,	Y = -1069.721  mm,	Z =  -250.211  mm,
+	W =     -.334 deg,	P =     -.245 deg,	R =   -10.110 deg
+};
+/END

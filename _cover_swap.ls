@@ -1,0 +1,73 @@
+/PROG  _COVER_SWAP
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 921;
+CREATE		= DATE 21-08-24  TIME 00:04:28;
+MODIFIED	= DATE 21-08-24  TIME 04:23:56;
+FILE_NAME	= ;
+VERSION		= 0;
+LINE_COUNT	= 45;
+MEMORY_SIZE	= 1437;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  R[150:RETRY]=0    ;
+   2:  LBL[98:START] ;
+   3:  !**Test Cover pick n place** ;
+   4:  IF R[3:TOOL #]<>0,JMP LBL[99] ;
+   5:   ;
+   6:   ;
+   7:  LBL[10:SWAP] ;
+   8:  IF (R[15:DUST COVER ON T1]=1 AND R[16:DUST COVER ON T2]=0) THEN ;
+   9:  CALL _PICK_T1_DC    ;
+  10:  CALL _PLACE_T2_DC    ;
+  11:  JMP LBL[99] ;
+  12:  ELSE ;
+  13:  ENDIF ;
+  14:   ;
+  15:  IF (R[15:DUST COVER ON T1]=0 AND R[16:DUST COVER ON T2]=1) THEN ;
+  16:  CALL _PICK_T2_DC    ;
+  17:  CALL _PLACE_T1_DC    ;
+  18:  JMP LBL[99] ;
+  19:  ELSE ;
+  20:  ENDIF ;
+  21:   ;
+  22:  R[150:RETRY]=R[150:RETRY]+1    ;
+  23:   ;
+  24:  IF (R[150:RETRY]<2) THEN ;
+  25:  !**Test cov pres** ;
+  26:  CALL _T1_CLAMP    ;
+  27:  IF (R[15:DUST COVER ON T1]=1) THEN ;
+  28:  JMP LBL[98] ;
+  29:  ELSE ;
+  30:  CALL _T1_UNCLAMP    ;
+  31:  ENDIF ;
+  32:   ;
+  33:   ;
+  34:  CALL _T2_CLAMP    ;
+  35:  IF (R[16:DUST COVER ON T2]=1) THEN ;
+  36:  JMP LBL[98] ;
+  37:  ELSE ;
+  38:  CALL _T2_UNCLAMP    ;
+  39:  JMP LBL[98] ;
+  40:  ENDIF ;
+  41:   ;
+  42:  ELSE ;
+  43:  ENDIF ;
+  44:   ;
+  45:  LBL[99:END] ;
+/POS
+/END

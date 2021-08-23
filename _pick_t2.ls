@@ -1,0 +1,74 @@
+/PROG  _PICK_T2
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 1198;
+CREATE		= DATE 21-08-19  TIME 21:16:16;
+MODIFIED	= DATE 21-08-23  TIME 23:48:42;
+FILE_NAME	= _PICK_T1;
+VERSION		= 0;
+LINE_COUNT	= 40;
+MEMORY_SIZE	= 1686;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  UTOOL_NUM=2 ;
+   2:  UFRAME_NUM=0 ;
+   3:  PAYLOAD[3:MASTER] ;
+   4:   ;
+   5:  !CHECK FOR T2 ;
+   6:  IF R[3:TOOL #]<>0,JMP LBL[99] ;
+   7:  IF R[3:TOOL #]=1,JMP LBL[99] ;
+   8:  IF DI[2:TOOL_UNLOCKED]<>ON,JMP LBL[99] ;
+   9:  IF DI[12:T2_COVER_CLAMPED]=ON AND DI[16:T2_UNLOCKED_FIXT]=OFF,JMP LBL[99] ;
+  10:   ;
+  11:  CALL _T2_UNCLAMP    ;
+  12:  WAIT DI[16:T2_UNLOCKED_FIXT]=ON    ;
+  13:  ! Set Offset ;
+  14:  PR[4:TOOL_OFFSET]=PR[4:TOOL_OFFSET]-PR[4:TOOL_OFFSET]    ;
+  15:   ;
+  16:  !SAFE APPROACH ;
+  17:  PR[4,3:TOOL_OFFSET]=(85) ;
+  18:L P[1:atTOOL] 500mm/sec CNT55 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  19:  !ADJUST COLL GUARD ;
+  20:  R[200:PAYLOAD_ADJUST]=120    ;
+  21:  COL GUARD ADJUST R[200] ;
+  22:  COL DETECT ON ;
+  23:  PAYLOAD[2:SANDER] ;
+  24:   ;
+  25:  !PICK T2 ;
+  26:L P[1:atTOOL] 100mm/sec FINE    ;
+  27:  CALL _ATI_LOCK    ;
+  28:  WAIT DI[1:TOOL_LOCKED]=ON    ;
+  29:  !SAFE RETREAT ;
+  30:L P[1:atTOOL] 100mm/sec CNT55 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  31:  !SAFE RETREAT 2 ;
+  32:  PR[4,2:TOOL_OFFSET]=400    ;
+  33:L P[1:atTOOL] 500mm/sec CNT10 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  34:  LBL[99] ;
+  35:  END ;
+  36:  !**Touch up** ;
+  37:L P[1:atTOOL] 100mm/sec FINE    ;
+  38:   ;
+  39:   ;
+  40:   ;
+/POS
+P[1:"atTOOL"]{
+   GP1:
+	UF : 0, UT : 2,		CONFIG : 'N U T, 0, 0, -1',
+	X =  -142.148  mm,	Y = -1021.530  mm,	Z =  -208.963  mm,
+	W =      .038 deg,	P =      .136 deg,	R =   -10.718 deg
+};
+/END

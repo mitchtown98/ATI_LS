@@ -1,0 +1,40 @@
+/PROG  _GET_CURR_XYZWPR
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 483;
+CREATE		= DATE 21-08-19  TIME 21:16:04;
+MODIFIED	= DATE 21-08-19  TIME 21:16:04;
+FILE_NAME	= TEST_GET;
+VERSION		= 0;
+LINE_COUNT	= 12;
+MEMORY_SIZE	= 807;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  !------------------------- ;
+   2:  !Check Current Position and ;
+   3:  !Store In PR[5] & R[188-193] ;
+   4:  !------------------------- ;
+   5:   ;
+   6:  PR[5:LPOS]=LPOS    ;
+   7:  R[188:LPOS X]=PR[5,1:LPOS]    ;
+   8:  R[189:LPOS Y]=PR[5,2:LPOS]    ;
+   9:  R[190:LPOS Z]=PR[5,3:LPOS]    ;
+  10:  R[191:LPOS W]=PR[5,4:LPOS]    ;
+  11:  R[192:LPOS P]=PR[5,5:LPOS]    ;
+  12:  R[193:LPOS R]=PR[5,6:LPOS]    ;
+/POS
+/END

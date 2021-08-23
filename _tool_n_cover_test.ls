@@ -1,0 +1,50 @@
+/PROG  _TOOL_N_COVER_TEST
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 481;
+CREATE		= DATE 21-08-23  TIME 21:01:00;
+MODIFIED	= DATE 21-08-24  TIME 03:30:34;
+FILE_NAME	= ;
+VERSION		= 0;
+LINE_COUNT	= 22;
+MEMORY_SIZE	= 821;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  COL GUARD ADJUST R[200] ;
+   2:  !TOOL 1 ;
+   3:   ;
+   4:  IF (R[...]) THEN ;
+   5:   ;
+   6:  CALL _PLACE_T1    ;
+   7:   ;
+   8:  !TOOL2 ;
+   9:  CALL _PICK_T2_DC    ;
+  10:   ;
+  11:  CALL _PLACE_T1_DC    ;
+  12:   ;
+  13:  CALL _PICK_T2    ;
+  14:   ;
+  15:  CALL _PLACE_T2    ;
+  16:  !**** ;
+  17:   ;
+  18:  CALL _PICK_T1_DC    ;
+  19:   ;
+  20:  CALL _PLACE_T2_DC    ;
+  21:   ;
+  22:   ;
+/POS
+/END

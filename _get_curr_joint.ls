@@ -1,0 +1,40 @@
+/PROG  _GET_CURR_JOINT
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 483;
+CREATE		= DATE 21-08-19  TIME 21:16:04;
+MODIFIED	= DATE 21-08-19  TIME 21:16:04;
+FILE_NAME	= TEST_GET;
+VERSION		= 0;
+LINE_COUNT	= 12;
+MEMORY_SIZE	= 807;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  !------------------------- ;
+   2:  !Check Current Position and ;
+   3:  !Store In PR[6] & R[194-199] ;
+   4:  !------------------------- ;
+   5:   ;
+   6:  PR[6:JPOS]=JPOS    ;
+   7:  R[194:JPOS J1]=PR[6,1:JPOS]    ;
+   8:  R[195:JPOS P2]=PR[6,2:JPOS]    ;
+   9:  R[196:JPOS J3]=PR[6,3:JPOS]    ;
+  10:  R[197:JPOS J4]=PR[6,4:JPOS]    ;
+  11:  R[198:JPOS J5]=PR[6,5:JPOS]    ;
+  12:  R[199:JPOS J6]=PR[6,6:JPOS]    ;
+/POS
+/END

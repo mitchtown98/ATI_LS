@@ -1,0 +1,72 @@
+/PROG  _PLACE_T2
+/ATTR
+OWNER		= MNEDITOR;
+COMMENT		= "";
+PROG_SIZE	= 1132;
+CREATE		= DATE 21-08-19  TIME 21:16:16;
+MODIFIED	= DATE 21-08-23  TIME 23:55:56;
+FILE_NAME	= _PICK_T2;
+VERSION		= 0;
+LINE_COUNT	= 38;
+MEMORY_SIZE	= 1628;
+PROTECT		= READ_WRITE;
+TCD:  STACK_SIZE	= 0,
+      TASK_PRIORITY	= 50,
+      TIME_SLICE	= 0,
+      BUSY_LAMP_OFF	= 0,
+      ABORT_REQUEST	= 0,
+      PAUSE_REQUEST	= 0;
+DEFAULT_GROUP	= 1,*,*,*,*;
+CONTROL_CODE	= 00000000 00000000;
+/APPL
+/APPL
+
+AUTO_SINGULARITY_HEADER;
+  ENABLE_SINGULARITY_AVOIDANCE   : TRUE;
+/MN
+   1:  UTOOL_NUM=2 ;
+   2:  UFRAME_NUM=0 ;
+   3:   ;
+   4:  !ADJUST COLL GUARD ;
+   5:  R[200:PAYLOAD_ADJUST]=120    ;
+   6:  COL GUARD ADJUST R[200] ;
+   7:  COL DETECT ON ;
+   8:  PAYLOAD[2:SANDER] ;
+   9:   ;
+  10:  !CHECK FOR T2 ;
+  11:  IF R[3:TOOL #]<>2,JMP LBL[99] ;
+  12:   ;
+  13:  CALL _T2_UNCLAMP    ;
+  14:  WAIT DI[16:T2_UNLOCKED_FIXT]=ON    ;
+  15:  ! Set Offset ;
+  16:  PR[4:TOOL_OFFSET]=PR[4:TOOL_OFFSET]-PR[4:TOOL_OFFSET]    ;
+  17:   ;
+  18:  !SAFE APPROACH 1 ;
+  19:  PR[4,2:TOOL_OFFSET]=(400) ;
+  20:  PR[4,3:TOOL_OFFSET]=(85) ;
+  21:L P[1] 300mm/sec CNT50 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  22:   ;
+  23:  !SAFE APPROACH 2 ;
+  24:  PR[4,2:TOOL_OFFSET]=(0) ;
+  25:L P[1] 500mm/sec CNT10 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  26:  !PLACE T2 ;
+  27:L P[1] 100mm/sec FINE    ;
+  28:  PAYLOAD[3:MASTER] ;
+  29:  CALL _ATI_UNLOCK    ;
+  30:   ;
+  31:  !SAFE RETREAT ;
+  32:L P[1] 100mm/sec CNT30 Tool_Offset,PR[4:TOOL_OFFSET]    ;
+  33:  LBL[99] ;
+  34:  END ;
+  35:  !**Touchup** ;
+  36:L P[1] 100mm/sec FINE    ;
+  37:   ;
+  38:   ;
+/POS
+P[1]{
+   GP1:
+	UF : 0, UT : 2,		CONFIG : 'N U T, 0, 0, -1',
+	X =  -142.148  mm,	Y = -1021.530  mm,	Z =  -208.963  mm,
+	W =      .038 deg,	P =      .136 deg,	R =   -10.718 deg
+};
+/END
